@@ -1,0 +1,217 @@
+import java.io.*;
+import java.util.*;
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[] bestArray = new int[]{1,2,3,4,5,6,7,8,9,10};
+        int[] averageArray = new int[]{7,4,8,2,10,5,6,1,3,9};
+        int[] worstArray = new int[]{10,9,8,7,6,5,4,3,2,1};
+    //    System.out.println(binarySearch(bestArray,bestArray.length,5));
+
+        for(int i=0;i<30;i++){
+            int[] avgArray = createAvgArray(10);
+            insertionSort(avgArray);
+        }
+    }
+
+    public static void radixSort(int[] array,int len){
+        long startTime = System.nanoTime();
+        int max  = getMax(array,len);
+        for(int i=1;max/i>0;i=i*10){
+            countSort(array, array.length, i);
+        }
+
+      /*  for(int i=0;i<array.length;i++) {
+
+        System.out.print(array[i]);
+        }*/
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println(duration);
+    }
+    public static void countSort(int[] array,int len,int dig){
+        long startTime = System.nanoTime();
+        int output[] = new int[len]; // output array
+        int i;
+        int count[] = new int[10];
+        Arrays.fill(count,0);
+        for (i = 0; i < len; i++)
+            count[ (array[i]/dig)%10 ]++;
+
+        for (i = 1; i < 10; i++)
+            count[i] += count[i - 1];
+
+        for (i = len - 1; i >= 0; i--)
+        {
+            output[count[ (array[i]/dig)%10 ] - 1] = array[i];
+            count[ (array[i]/dig)%10 ]--;
+        }
+
+        for (i = 0; i < len; i++)
+            array[i] = output[i];
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println(duration);
+    }
+
+
+    public static   int[] selectionSort(int[] array){
+        long startTime = System.nanoTime();
+        int len = array.length;
+        int min;
+
+
+        for(int j=0;j<len;j++){
+            min = j;
+            for(int i=j+1;i<len;i++){
+                if(array[i] < array[min]){
+                    min = i;
+                }
+            }
+            int temp = array[j];
+            array[j] = array[min];
+            array[min] = temp;
+
+        }
+
+ /*       for(int i=0;i<array.length;i++){
+            System.out.print(array[i]);
+        }*/
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println(duration);
+        return array;
+    }
+
+    public static int[] insertionSort(int[] array){
+        long startTime = System.nanoTime();
+        int i,j;
+        for(i=0;i<array.length;i++){
+            for(j=i;j>0;j--){
+                if(array[j] < array[j-1]){
+                    int temp = array[j];
+                    array[j] = array[j-1];
+                    array[j-1] = temp;
+                }
+                else
+                    break;
+            }
+        }
+        for(i=0;i<array.length;i++){
+            System.out.print(array[i]);
+        }
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println(duration/1000000000);
+        return array;
+    }
+
+    public static void merge(int[] array,int[] tempArray){
+        long startTime = System.nanoTime();
+        for(int i=0;i<array.length;i++){
+            tempArray[i] = array[i];
+        }
+        int i=0;int j=(array.length/2)+1;
+        for(int z=0;z<array.length;z++){
+            if(i>array.length/2){ // eger i midden büyükse sol taraf bitmiştir sağ taraf kalmıştır
+                array[z] = tempArray[j++];
+            }
+            else if(j>array.length){ // eğer j hiden büyükse sağ bitmiştir sol kalmıştır
+                array[z] = tempArray[i++];
+            }
+            else if(tempArray[i] < tempArray[j]){ // hangisi küçükse ekle ve indexi 1 arttır
+                array[z] = tempArray[i++];
+            }
+            else
+                array[z] = tempArray[j++];
+        }
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println(duration);
+       /* for(i=0;i<array.length;i++){
+            System.out.print(array[i]);
+        }*/
+
+    }
+    public static void sort(int[] array,int[] tempArray,int start,int end){
+        if (end <= start)
+            return;
+        int mid = start + (end - start) / 2;
+        sort (array, tempArray, start, mid);
+        sort (array, tempArray,mid,end);
+        merge(array, tempArray);
+
+    }
+    public static int[] mergeSort(int[] array){
+
+        int start,mid,end;
+        start = 0;
+        mid = array.length/2;
+        end = array.length;
+
+
+        return array;
+    }
+
+    public static int binarySearch(int[] array,int len,int value){
+        int left = 0;
+        int right = len-1;
+        int mid;
+        while (left <= right){
+            mid = (left + right)/2;
+            if(array[mid] < value){
+                left = mid + 1;
+            }
+            else if(array[mid] > value)
+                right = mid -1;
+            else{
+                return mid;
+            }
+        }
+
+        return -1;
+    }
+
+    public static int getMax(int[] array,int n){
+        int max = array[0];
+        for(int i=0;i<n;i++){
+            if(array[i]>max){
+                max = array[i];
+            }
+        }
+        return max;
+    }
+    public static int getMin(int[] array,int n){
+        int min = array[0];
+        for(int i=0;i<n;i++){
+            if(array[i]<min){
+                min = array[i];
+            }
+        }
+        return min;
+    }
+    public static int[] createBestArray(int n){
+        int[] bestArray = new int[n];
+        for(int i=0;i<n;i++){
+            bestArray[i]=i;
+        }
+        return bestArray;
+    }
+    public static int[] createAvgArray(int n){
+        int[] avgArray = new int[n];
+        Random randomNumber = new Random();
+        for(int i= 0;i<n;i++){
+            int x = randomNumber.nextInt(n+1);
+            avgArray[i] = x;
+        }
+        return avgArray;
+    }
+    public static int[] createWorstArray(int n){
+        int[] worstArray = new int[n];
+        for(int i=0;i<n;i++){
+            worstArray[i] = n-i;
+        }
+        return worstArray;
+    }
+}

@@ -1,0 +1,147 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+
+        String fileName = "transportation_network.inp"; // reading pointer
+        File file = new File(fileName);
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+
+        String line;
+
+        ArrayList<City> network = new ArrayList<City>();
+
+
+    //    ArrayList<String> airway = new ArrayList<String>();
+   //     ArrayList<String> highway = new ArrayList<String>();
+     //   ArrayList<String> railway = new ArrayList<String>();
+
+    //    ArrayList<String> temp = airway;
+        int flag = -1;
+        int numOfCities = 0;
+        int helper = 0;
+        int helper2 = 0;
+        ArrayList<String> cities = new ArrayList<String>();
+        while((line = br.readLine()) != null){
+            String[] parts = line.split(" ");
+
+            if(parts[0].equals("Airway")){
+                flag = 0;
+                continue;
+            }
+            if(parts[0].equals("Highway")){
+                flag = 1;
+                continue;
+            }
+            if(parts[0].equals("Railway")){
+                flag = 2;
+                continue;
+            }
+            if(line.isEmpty()){
+                continue;
+            }
+
+            if(flag == 0){
+                City tempCity = new City();
+                tempCity.name = parts[0];
+                tempCity.airway = parts[1];
+                network.add(tempCity);
+                cities.add(parts[0]);
+                numOfCities++;
+
+            }
+            else if(flag == 1){
+                network.get(helper).highway = parts[1];
+                helper++;
+            }
+            else if(flag == 2){
+                network.get(helper2).railway = parts[1];
+                helper2++;
+            }
+
+
+        } // reading part ends
+
+
+       /* for(int i = 0; i < numOfCities ; i++){
+            System.out.println(network.get(i).airway);
+            System.out.println(network.get(i).highway);
+            System.out.println(network.get(i).railway);
+            System.out.println();
+        }*/
+       String temp = "";
+       ArrayList<String> paths = new ArrayList<>();
+       queryone(network, network.get(2),numOfCities,temp, cities,paths);
+
+
+
+
+
+    } // main ends
+    public static void queryone(ArrayList<City> network,City city, int numOfCities,String temp,ArrayList<String> cities,ArrayList<String> paths){
+        for(int i = 0; i < 1; i++){
+            if(city.name.equals(network.get(numOfCities-1).name)){
+
+                System.out.println(temp + city.name);
+                break;
+            }
+            if(city.airway.contains("1")){
+                for(int j = 0; j < numOfCities; j++){
+                    if(city.airway.charAt(j) == '1'){
+                      //  temp += city.name+" A ";
+                       // System.out.print(city.name+" A ");
+                        queryone(network, network.get(j), numOfCities, temp + city.name + " A ", cities, paths);
+                    }
+                }
+            }
+
+          /*  else{
+                System.out.println(temp);
+                paths.add(temp);
+                temp = null;
+
+            }*/
+             if(city.highway.contains("1")){
+                for(int j = 0; j < numOfCities; j++){
+                    if(city.highway.charAt(j) == '1'){
+                   //     temp += city.name +" H ";
+                     //   System.out.print(city.name+" H ");
+                        queryone(network, network.get(j), numOfCities, temp+city.name +" H ", cities, paths);
+                    }
+                }
+            }
+
+           /*  else{
+                 System.out.println(temp);
+                 paths.add(temp);
+                 temp = null;
+
+             }*/
+             if(city.railway.contains("1")){
+                for(int j = 0; j < numOfCities; j++){
+                    if(city.railway.charAt(j) == '1'){
+                       // temp += city.name +" R ";
+                      //  System.out.print(city.name+" R ");
+                        queryone(network, network.get(j), numOfCities, temp+city.name +" R ", cities, paths);
+                    }
+                }
+            }
+
+
+           /*  else{
+                 System.out.println(temp);
+                 paths.add(temp);
+                 temp = null;
+
+             }*/
+
+        }
+
+    }
+
+}

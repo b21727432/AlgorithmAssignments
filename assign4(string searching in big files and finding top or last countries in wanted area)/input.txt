@@ -1,0 +1,5 @@
+area-total,top,3
+area-land,top,2+airports,top,4
+area-water,last,2+population,top,3
+median_age-female,last,6+population,top,3+birth_rate,top,2
+area-land,last,3+death_rate,top,3
